@@ -1,13 +1,11 @@
 Dotfiles for Linux configuration
 
-Installation
-============
-
+#Installation
+```
     $ ./setup [OPTIONS]
-
-Options
-=======
-
+```
+#Options
+```
 -all
 -android
 -dotfiles
@@ -15,3 +13,4 @@ Options
 -mongodb
 -python
 -h, --help
+```
