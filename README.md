@@ -1,4 +1,4 @@
-Dotfiles for Linux configuration
+Dotfiles for Ubuntu 14.04
 
 #Installation
 ```
