@@ -1,0 +1,141 @@
+#!/usr/bin/env bash
+
+current_dir=`pwd`
+
+function dot_files {
+    # VIM
+    ln -svf $current_dir/vimrc ~/.vimrc
+    ln -svfn $current_dir/vim/autoload ~/.vim
+    ln -svfn $current_dir/vim/plugin ~/.vim
+    if [ ! -d ~/.vim/bundle/darcula ]
+    then
+      git clone https://github.com/blueshirts/darcula.git ~/.vim/bundle/darcula
+    fi
+    if [ ! -d ~/.vim/bundle/syntastic ]
+    then
+      git clone https://github.com/scrooloose/syntastic.git ~/.vim/bundle/syntastic
+    fi
+
+    # /etc/profile.d
+    sudo ln -svf $current_dir/profile.d/android.sh /etc/profile.d/android.sh
+    sudo ln -svf $current_dir/profile.d/appengine.sh /etc/profile.d/appengine.sh
+    sudo ln -svf $current_dir/profile.d/virtualenv.sh /etc/profile.d/virtualenv.sh
+
+    # /etc/udev/rules.d
+    sudo ln -svf $current_dir/rules.d/51-android.rules /etc/udev/rules.d/51-android.rules
+    sudo ln -svf $current_dir/rules.d/51-arduino.rules /etc/udev/rules.d/51-arduino.rules
+    sudo ln -svf $current_dir/rules.d/91-garmin.rules /etc/udev/rules.d/91-garmin.rules
+
+    # Dotfiles
+    ln -svf $current_dir/gitconfig ~/.gitconfig
+
+    # Bash
+    if ! grep -Fxq "# Added by dotfiles setup" ~/.bashrc
+    then
+      cat $current_dir/bashrc_section >> ~/.bashrc
+    fi
+    ln -svfn $current_dir/bashrc.d ~/.bashrc.d
+}
+
+# Python Environment
+function python_env {
+    mkdir -p $HOME/.virtualenv
+    mkdir -p $HOME/virtualenv-projects
+}
+
+# MongoDB
+function mongodb {
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+    sudo ln -svf $current_dir/apt/sources.list.d/mongodb-org-3.0.list /etc/apt/sources.list.d/mongodb-org-3.0.list
+}
+
+# Android SDK
+function android {
+    if [ ! -d /opt/android-sdk2 ]
+    then
+        sdk_file="android-sdk_r24.4-linux.tgz"
+        cd ~/Downloads
+        if [ ! -f $sdk_file ]
+        then
+            printf "Downloading $sdk_file\n"
+            wget -q http://dl.google.com/android/$sdk_file
+        fi
+        printf "Unzipping $sdk_file\n"
+        tar -xf $sdk_file
+        sudo mv android-sdk-linux /opt/android-sdk2
+        cd $current_dir
+      fi
+}
+
+# Install packages
+function install {
+    sudo apt-get update
+    sudo apt-get install build-essential cmake ctags make python-dev curl virtualenv-clone virtualenvwrapper vim git mongodb-org
+}
+
+# Help usage message
+function usage {
+    format="%-16s%-64s\n"
+    printf "Usage: setup [OPTIONS]\n\n"
+    printf "Options available:\n"
+    printf $format "  -all" "Install all options"
+    printf $format "  -android" "Install Andriod SDK to /opt/android-sdk"
+    printf $format "  -dotfiles" "Symbolic link dotfiles"
+    printf $format "  -install" "Install packages with apt-get"
+    printf $format "  -mongodb" "Setup apt sources list to include mongodb"
+    printf $format "  -python" "Setup python virtualenv"
+
+    printf $format "  -h, --help" "This help message"
+}
+
+# Error encountered
+function error {
+    printf "setup: invalid option -- '$1'\nTry 'setup -h' for more information.\n"
+}
+
+# Update cached credentials right away
+# If needed, user will be prompted for password
+# This prevents password prompt from appearing mid install
+sudo -v
+
+# Default option, if no arguments are provided then install dot_files
+if [ "$#" -eq 0 ]
+then
+    printf "\nSetting up dot files.\nFor additional usages use -h flag.\n\n"
+    dot_files
+fi
+
+# Install dependancies for each argument
+for i in "$@"
+do
+    case $i in
+        -all)
+            dot_files
+            android
+            mongodb
+            python_env
+            install
+            ;;
+        -android)
+            android
+            ;;
+        -dotfiles)
+            dot_files
+            ;;
+        -install)
+            install
+            ;;
+        -mongodb)
+            mongodb
+            ;;
+        -python)
+            python_evn
+            ;;
+        -h|-help|--help)
+            usage
+            ;;
+        *)
+            error $i
+            ;;
+    esac
+done

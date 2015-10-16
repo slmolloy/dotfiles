@@ -1,0 +1,4 @@
+#SUBSYSTEM=="usb", ATTRS{idVendor}=="8087", ATTRS{idProduct}=="0a9e", SYMLINK+="arduino arduino_$attr{serial}"
+KERNEL=="ttyACM[0-9]*", ATTRS{idVendor}=="8087", ATTRS{idProduct}=="0a9e", MODE="0666", SYMLINK+="arduino_edison"
+KERNEL=="ttyACM[0-9]*", ATTRS{idVendor}=="8086", ATTRS{idProduct}=="babe", MODE="0666", SYMLINK+="arduino_galileo"
+KERNEL=="ttyACM[0-9]*", ATTRS{idVendor}=="2a03", ATTRS{idProduct}=="0043", MODE="0666", SYMLINK+="arduino_uno"

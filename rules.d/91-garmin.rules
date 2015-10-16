@@ -1,0 +1,1 @@
+SUBSYSTEM=="usb", ATTRS{idVendor}=="091e", ATTRS{idProduct}=="24f0",RUN+="/home/slmolloy/projects/garmin/runner.sh"

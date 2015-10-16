@@ -1,0 +1,13 @@
+[user]
+	name = Scott Molloy
+	email = scott.l.molloy@gmail.com
+[core]
+	editor = vim
+[merge]
+	tool = vimdiff
+[mergetool]
+	prompt = false
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
