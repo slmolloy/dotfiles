@@ -51,7 +51,7 @@ function mongodb {
 
 # Android SDK
 function android {
-    if [ ! -d /opt/android-sdk2 ]
+    if [ ! -d /opt/android-sdk ]
     then
         sdk_file="android-sdk_r24.4-linux.tgz"
         cd ~/Downloads
@@ -62,7 +62,7 @@ function android {
         fi
         printf "Unzipping $sdk_file\n"
         tar -xf $sdk_file
-        sudo mv android-sdk-linux /opt/android-sdk2
+        sudo mv android-sdk-linux /opt/android-sdk
         cd $current_dir
       fi
 }
