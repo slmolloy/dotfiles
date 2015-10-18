@@ -3,10 +3,11 @@
 current_dir=`pwd`
 
 function dot_files {
+    sudo apt-get install -y vim git ctags
+
     # VIM
     ln -svf $current_dir/vimrc ~/.vimrc
-    ln -svfn $current_dir/vim/autoload ~/.vim
-    ln -svfn $current_dir/vim/plugin ~/.vim
+    ln -svfn $current_dir/vim ~/.vim
     if [ ! -d ~/.vim/bundle/darcula ]
     then
       git clone https://github.com/blueshirts/darcula.git ~/.vim/bundle/darcula
@@ -19,7 +20,6 @@ function dot_files {
     # /etc/profile.d
     sudo ln -svf $current_dir/profile.d/android.sh /etc/profile.d/android.sh
     sudo ln -svf $current_dir/profile.d/appengine.sh /etc/profile.d/appengine.sh
-    sudo ln -svf $current_dir/profile.d/virtualenv.sh /etc/profile.d/virtualenv.sh
 
     # /etc/udev/rules.d
     sudo ln -svf $current_dir/rules.d/51-android.rules /etc/udev/rules.d/51-android.rules
@@ -41,6 +41,7 @@ function dot_files {
 function python_env {
     mkdir -p $HOME/.virtualenv
     mkdir -p $HOME/virtualenv-projects
+    sudo ln -svf $current_dir/profile.d/virtualenv.sh /etc/profile.d/virtualenv.sh
 }
 
 # MongoDB
@@ -51,14 +52,18 @@ function mongodb {
 
 # Android SDK
 function android {
+
+    sudo apt-get install -y openjdk-7-jdk
+
     if [ ! -d /opt/android-sdk ]
     then
         sdk_file="android-sdk_r24.4-linux.tgz"
+        mkdir -p ~/Downloads
         cd ~/Downloads
         if [ ! -f $sdk_file ]
         then
             printf "Downloading $sdk_file\n"
-            wget -q http://dl.google.com/android/$sdk_file
+            wget http://dl.google.com/android/$sdk_file
         fi
         printf "Unzipping $sdk_file\n"
         tar -xf $sdk_file
@@ -67,10 +72,17 @@ function android {
       fi
 }
 
+# Vagrant and Virtualbox
+function virtual {
+    sudo apt-get install -y virtualbox vagrant
+    #vagrant box add ubuntu/trusty64 https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box
+    #vagrant init ubuntu/trusty64
+}
+
 # Install packages
 function install {
     sudo apt-get update
-    sudo apt-get install build-essential cmake ctags make python-dev curl virtualenv-clone virtualenvwrapper vim git mongodb-org
+    sudo apt-get install -y build-essential cmake ctags make python-dev curl virtualenv-clone virtualenvwrapper vim git mongodb-org
 }
 
 # Help usage message
@@ -84,6 +96,7 @@ function usage {
     printf $format "  -install" "Install packages with apt-get"
     printf $format "  -mongodb" "Setup apt sources list to include mongodb"
     printf $format "  -python" "Setup python virtualenv"
+    printf $format "  -virtual" "Setup Vagrant and Virtualbox"
 
     printf $format "  -h, --help" "This help message"
 }
@@ -93,10 +106,12 @@ function error {
     printf "setup: invalid option -- '$1'\nTry 'setup -h' for more information.\n"
 }
 
+
 # Update cached credentials right away
 # If needed, user will be prompted for password
 # This prevents password prompt from appearing mid install
 sudo -v
+
 
 # Default option, if no arguments are provided then install dot_files
 if [ "$#" -eq 0 ]
@@ -130,6 +145,9 @@ do
             ;;
         -python)
             python_evn
+            ;;
+        -virtual)
+            virtual
             ;;
         -h|-help|--help)
             usage
