@@ -79,6 +79,12 @@ function virtual {
     #vagrant init ubuntu/trusty64
 }
 
+# Docker setup
+function docker {
+    sudo apt-get install wget
+    wget -qO- https://get.docker.com/ | sh
+}
+
 # Install packages
 function install {
     sudo apt-get update
@@ -92,6 +98,7 @@ function usage {
     printf "Options available:\n"
     printf $format "  -all" "Install all options"
     printf $format "  -android" "Install Andriod SDK to /opt/android-sdk"
+    printf $format "  -docker" "Install Docker"
     printf $format "  -dotfiles" "Symbolic link dotfiles"
     printf $format "  -install" "Install packages with apt-get"
     printf $format "  -mongodb" "Setup apt sources list to include mongodb"
@@ -133,6 +140,9 @@ do
             ;;
         -android)
             android
+            ;;
+        -docker)
+            docker
             ;;
         -dotfiles)
             dot_files
