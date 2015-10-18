@@ -48,6 +48,8 @@ function python_env {
 function mongodb {
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
     sudo ln -svf $current_dir/apt/sources.list.d/mongodb-org-3.0.list /etc/apt/sources.list.d/mongodb-org-3.0.list
+    sudo apt-get update
+    sudo apt-get install mongodb-org
 }
 
 # Android SDK
@@ -88,7 +90,7 @@ function docker {
 # Install packages
 function install {
     sudo apt-get update
-    sudo apt-get install -y build-essential cmake ctags make python-dev curl virtualenv-clone virtualenvwrapper vim git mongodb-org
+    sudo apt-get install -y build-essential cmake ctags make python-dev curl virtualenv-clone virtualenvwrapper vim git
 }
 
 # Help usage message
