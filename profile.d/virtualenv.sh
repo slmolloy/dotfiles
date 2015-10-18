@@ -5,4 +5,4 @@ export WORKON_HOME=$HOME/.virtualenv
 export PROJECT_HOME=$HOME/virtualenv-projects
 
 #Location of virtualenvwrapper.sh
-source /usr/local/bin/virtualenvwrapper.sh
+source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
