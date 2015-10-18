@@ -39,6 +39,7 @@ function dot_files {
 
 # Python Environment
 function python_env {
+    sudo apt-get install virtualenv-clone virtualenvwrapper
     mkdir -p $HOME/.virtualenv
     mkdir -p $HOME/virtualenv-projects
     sudo ln -svf $current_dir/profile.d/virtualenv.sh /etc/profile.d/virtualenv.sh
@@ -90,7 +91,7 @@ function docker {
 # Install packages
 function install {
     sudo apt-get update
-    sudo apt-get install -y build-essential cmake ctags make python-dev curl virtualenv-clone virtualenvwrapper vim git
+    sudo apt-get install -y build-essential cmake ctags make python-dev curl vim git
 }
 
 # Help usage message
@@ -156,7 +157,7 @@ do
             mongodb
             ;;
         -python)
-            python_evn
+            python_env
             ;;
         -virtual)
             virtual
