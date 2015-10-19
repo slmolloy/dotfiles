@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 current_dir=`pwd`
+java_package='openjdk-7-jdk'
 
 function dot_files {
     sudo apt-get install -y vim git ctags
@@ -18,7 +19,6 @@ function dot_files {
     fi
 
     # /etc/profile.d
-    sudo ln -svf $current_dir/profile.d/android.sh /etc/profile.d/android.sh
     sudo ln -svf $current_dir/profile.d/appengine.sh /etc/profile.d/appengine.sh
 
     # /etc/udev/rules.d
@@ -55,24 +55,62 @@ function mongodb {
 
 # Android SDK
 function android {
-
-    sudo apt-get install -y openjdk-7-jdk
-
-    if [ ! -d /opt/android-sdk ]
+    # Check to see if ANDROID_HOME exists and is a valid directory
+    if [ ! -z $ANDROID_HOME ] && [ -d $ANDROID_HOME ]
     then
-        sdk_file="android-sdk_r24.4-linux.tgz"
-        mkdir -p ~/Downloads
-        cd ~/Downloads
-        if [ ! -f $sdk_file ]
-        then
-            printf "Downloading $sdk_file\n"
-            wget http://dl.google.com/android/$sdk_file
-        fi
-        printf "Unzipping $sdk_file\n"
-        tar -xf $sdk_file
-        sudo mv android-sdk-linux /opt/android-sdk
-        cd $current_dir
-      fi
+        printf "Android SDK already exists at $ANDROID_HOME\n"
+        return
+    fi
+
+    # If ANDROID_HOME does not exists or is not a directory then install
+    sdk_dir="/opt/android-sdk"
+    sdk_file="android-sdk_r24.4-linux.tgz"
+
+    # Link Android configuration file
+    sudo ln -svf $current_dir/profile.d/android.sh /etc/profile.d/android.sh
+
+    sudo apt-get install -y $java_package
+    mkdir -p ~/Downloads
+    if [ ! -f ~/Downloads/$sdk_file ]
+    then
+        printf "Downloading $sdk_file\n"
+        wget -P ~/Downloads http://dl.google.com/android/$sdk_file
+    else
+        printf "Android SDK already downloaded to ~/Downloads/$sdk_file\n"
+    fi
+    printf "Unzipping $sdk_file\n"
+    tar -xf ~/Downloads/$sdk_file -C ~/Downloads
+    printf "Moving Android SDK to $sdk_dir\n"
+    sudo mv ~/Downloads/android-sdk-linux $sdk_dir
+}
+
+# Gradle
+function gradle {
+    # Check to see if GRADLE_HOME exists and is a valid directory
+    if [ ! -z $GRADLE_HOME ] && [ -d $GRADLE_HOME ]
+    then
+        printf "Gradle already exists at $GRADLE_HOME\n"
+        return
+    fi
+
+    # If GRADLE_HOME does not exist or is not a directory then install
+    gradle_dir="/usr/local/gradle"
+    gradle_file="gradle-2.7-all.zip"
+
+    # Link Gradle configuration file
+    sudo ln -svf $current_dir/profile.d/gradle.sh /etc/profile.d/gradle.sh
+
+    sudo apt-get install -y $java_package
+    mkdir -p ~/Downloads
+    if [ ! -f ~/Downloads/$gradle_file ]
+    then
+        printf "Downloading $gradle_file\n"
+        wget -P ~/Downloads https://services.gradle.org/distributions/$gradle_file
+    else
+        printf "Gradle already downloaded to ~/Downloads/$gradle_file\n"
+    fi
+    printf "Unzipping $gradle_file\n"
+    sudo unzip ~/Downloads/$gradle_file -d /usr/local/gradle/
 }
 
 # Vagrant and Virtualbox
@@ -100,10 +138,11 @@ function usage {
     printf "Usage: setup [OPTIONS]\n\n"
     printf "Options available:\n"
     printf $format "  -all" "Install all options"
-    printf $format "  -android" "Install Andriod SDK to /opt/android-sdk"
+    printf $format "  -android" "Install Andriod SDK and configure ANDROID_HOME"
     printf $format "  -docker" "Install Docker"
     printf $format "  -dotfiles" "Symbolic link dotfiles"
     printf $format "  -install" "Install packages with apt-get"
+    printf $format "  -gradle" "Install Gradle and configure to run as daemon"
     printf $format "  -mongodb" "Setup apt sources list to include mongodb"
     printf $format "  -python" "Setup python virtualenv"
     printf $format "  -virtual" "Setup Vagrant and Virtualbox"
@@ -152,6 +191,9 @@ do
             ;;
         -install)
             install
+            ;;
+        -gradle)
+            gradle
             ;;
         -mongodb)
             mongodb
