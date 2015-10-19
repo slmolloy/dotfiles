@@ -8,9 +8,12 @@ Dotfiles for Ubuntu 14.04
 ```
 -all
 -android
+-docker
 -dotfiles
 -install
+-gradle
 -mongodb
 -python
+-virtual
 -h, --help
 ```
