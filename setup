@@ -133,7 +133,7 @@ function virtual {
 }
 
 # Docker setup
-function docker {
+function docker_install {
     if command -v docker >/dev/null 2>&1
     then
         printf "docker already installed\n"
@@ -141,6 +141,7 @@ function docker {
         printf "Downloading and installing docker\n"
         sudo apt-get install wget
         wget -qO- https://get.docker.com/ | sh
+        sudo usermod -aG docker $USER
     fi
 
     if command -v docker-compose >/dev/null 2>&1
@@ -162,7 +163,7 @@ function wakeonlan {
         printf "etherwake already installed\n"
     else
         printf "Downloading and installing etherwake\n"
-        sudo apt-get install etherwake
+        sudo apt-get install -y etherwake
     fi
     mkdir -p ~/.bashrc.d
     ln -svf $current_dir/bashrc.d/2-wol.sh ~/.bashrc.d/2-wol.sh
@@ -239,7 +240,7 @@ do
             chrome
             ;;
         -docker)
-            docker
+            docker_install
             ;;
         -dotfiles)
             dot_files
