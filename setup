@@ -11,11 +11,11 @@ function dot_files {
     ln -svfn $current_dir/vim ~/.vim
     if [ ! -d ~/.vim/bundle/darcula ]
     then
-      git clone https://github.com/blueshirts/darcula.git ~/.vim/bundle/darcula
+        git clone https://github.com/blueshirts/darcula.git ~/.vim/bundle/darcula
     fi
     if [ ! -d ~/.vim/bundle/syntastic ]
     then
-      git clone https://github.com/scrooloose/syntastic.git ~/.vim/bundle/syntastic
+        git clone https://github.com/scrooloose/syntastic.git ~/.vim/bundle/syntastic
     fi
 
     # /etc/profile.d
@@ -30,9 +30,12 @@ function dot_files {
     ln -svf $current_dir/gitconfig ~/.gitconfig
 
     # Bash
-    if ! grep -Fxq "# Added by dotfiles setup" ~/.bashrc
+    if grep -xq ".*.bashrc.d.*" ~/.bashrc
     then
-      cat $current_dir/bashrc_section >> ~/.bashrc
+        printf "Loop through .bashrc.d already exists\n"
+    else
+        printf "Adding loop through .bashrc.d\n"
+        cat $current_dir/bashrc_section >> ~/.bashrc
     fi
     ln -svfn $current_dir/bashrc.d ~/.bashrc.d
 }
@@ -43,6 +46,12 @@ function python_env {
     mkdir -p $HOME/.virtualenv
     mkdir -p $HOME/virtualenv-projects
     sudo ln -svf $current_dir/profile.d/virtualenv.sh /etc/profile.d/virtualenv.sh
+
+    if [ ! -d ~/.pyenv ]
+    then
+        git clone https://github.com/yyuu/pyenv.git ~/.pyenv
+    fi
+    ln -svf $current_dir/bashrc.d/2-pyenv.sh ~/.bashrc.d/2-pyenv.sh
 }
 
 # MongoDB
@@ -122,8 +131,25 @@ function virtual {
 
 # Docker setup
 function docker {
-    sudo apt-get install wget
-    wget -qO- https://get.docker.com/ | sh
+    if command -v docker >/dev/null 2>&1
+    then
+        printf "docker already installed\n"
+    else
+        printf "Downloading and installing docker\n"
+        sudo apt-get install wget
+        wget -qO- https://get.docker.com/ | sh
+    fi
+
+    if command -v docker-compose >/dev/null 2>&1
+    then
+        printf "docker-compose already installed\n"
+    else
+        printf "Downloading and installing docker-compose\n"
+        mkdir -p ~/Downloads
+        curl -L https://github.com/docker/compose/releases/download/1.4.2/docker-compose-`uname -s`-`uname -m` > ~/Downloads/docker-compose
+        chmod +x ~/Downloads/docker-compose
+        sudo mv ~/Downloads/docker-compose /usr/local/bin/
+    fi
 }
 
 # Install packages
