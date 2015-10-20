@@ -168,6 +168,14 @@ function wakeonlan {
     ln -svf $current_dir/bashrc.d/2-wol.sh ~/.bashrc.d/2-wol.sh
 }
 
+# Install Chrome Browser {
+function chrome {
+    mkdir ~/Downloads
+    wget -P ~/Downloads https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    sudo dpkg -i ~/Downloads/google-chrome-stable_current_amd64.deb
+    sudo apt-get install -f
+}
+
 # Install packages
 function install {
     sudo apt-get update
@@ -181,6 +189,7 @@ function usage {
     printf "Options available:\n"
     printf $format "  -all" "Install all options"
     printf $format "  -android" "Install Andriod SDK and configure ANDROID_HOME"
+    printf $format "  -chrome" "Install the Chrome Browser"
     printf $format "  -docker" "Install Docker"
     printf $format "  -dotfiles" "Symbolic link dotfiles"
     printf $format "  -install" "Install packages with apt-get"
@@ -225,6 +234,9 @@ do
             ;;
         -android)
             android
+            ;;
+        -chrome)
+            chrome
             ;;
         -docker)
             docker
