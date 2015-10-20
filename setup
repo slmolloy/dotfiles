@@ -37,7 +37,9 @@ function dot_files {
         printf "Adding loop through .bashrc.d\n"
         cat $current_dir/bashrc_section >> ~/.bashrc
     fi
-    ln -svfn $current_dir/bashrc.d ~/.bashrc.d
+    mkdir -p ~/.bashrc.d
+    ln -svf $current_dir/bashrc.d/1-colors.sh ~/.bashrc.d/1-colors.sh
+    ln -svf $current_dir/bashrc.d/2-prompt.sh ~/.bashrc.d/2-prompt.sh
 }
 
 # Python Environment
@@ -51,6 +53,7 @@ function python_env {
     then
         git clone https://github.com/yyuu/pyenv.git ~/.pyenv
     fi
+    mkdir -p ~/.bashrc.d
     ln -svf $current_dir/bashrc.d/2-pyenv.sh ~/.bashrc.d/2-pyenv.sh
 }
 
@@ -152,6 +155,19 @@ function docker {
     fi
 }
 
+# Setup Wake-On-Lan
+function wakeonlan {
+    if command -v etherwake >/dev/null 2>&1
+    then
+        printf "etherwake already installed\n"
+    else
+        printf "Downloading and installing etherwake\n"
+        sudo apt-get install etherwake
+    fi
+    mkdir -p ~/.bashrc.d
+    ln -svf $current_dir/bashrc.d/2-wol.sh ~/.bashrc.d/2-wol.sh
+}
+
 # Install packages
 function install {
     sudo apt-get update
@@ -172,6 +188,7 @@ function usage {
     printf $format "  -mongodb" "Setup apt sources list to include mongodb"
     printf $format "  -python" "Setup python virtualenv"
     printf $format "  -virtual" "Setup Vagrant and Virtualbox"
+    printf $format "  -wol" "Wake-On-Lan install and config wake_on_lan_* functions"
 
     printf $format "  -h, --help" "This help message"
 }
@@ -229,6 +246,9 @@ do
             ;;
         -virtual)
             virtual
+            ;;
+        -wol)
+            wakeonlan
             ;;
         -h|-help|--help)
             usage
