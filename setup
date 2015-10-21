@@ -57,6 +57,46 @@ function python_env {
     ln -svf $current_dir/bashrc.d/2-pyenv.sh ~/.bashrc.d/2-pyenv.sh
 }
 
+# Setup PyCharm
+function pycharm_ide {
+    pycharm_file="pycharm-professional-4.5.4.tar.gz"
+
+    sudo apt-get install -y $java_package
+
+    mkdir -p ~/Downloads
+    if [ ! -f ~/Downloads/$pycharm_file ]
+    then
+        printf "Downloading $pycharm_file\n"
+        wget -P ~/Downloads https://download.jetbrains.com/python/$pycharm_file
+    else
+        printf "PyCharm already downloaded\n"
+    fi
+    printf "Unzipping $pycharm_file\n"
+    tar -xf ~/Downloads/$pycharm_file -C ~/Downloads
+    sudo find ~/Downloads -name pycharm* -type d -execdir mv {} /opt/pycharm \;
+    /opt/pycharm/bin/pycharm.sh &
+}
+
+# Setup WebStorm
+function webstorm_ide {
+    webstorm_file="WebStorm-10.0.4.tar.gz"
+
+    sudo apt-get install -y $java_package
+
+    mkdir -p ~/Downloads
+    if [ ! -f ~/Downloads/$webstorm_file ]
+    then
+        printf "Downloading $webstorm_file\n"
+        wget -P ~/Downloads https://download.jetbrains.com/webstorm/$webstorm_file
+    else
+        printf "WebStorm already downloaded\n"
+    fi
+    printf "Unzipping $webstorm_file\n"
+    tar -xf ~/Downloads/$webstorm_file -C ~/Downloads
+    sudo find ~/Downloads -name WebStorm* -type d -execdir mv {} /opt/webstorm \;
+    /opt/webstorm/bin/webstorm.sh &
+}
+
 # MongoDB
 function mongodb {
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
@@ -82,6 +122,7 @@ function android {
     sudo ln -svf $current_dir/profile.d/android.sh /etc/profile.d/android.sh
 
     sudo apt-get install -y $java_package
+
     mkdir -p ~/Downloads
     if [ ! -f ~/Downloads/$sdk_file ]
     then
@@ -94,6 +135,26 @@ function android {
     tar -xf ~/Downloads/$sdk_file -C ~/Downloads
     printf "Moving Android SDK to $sdk_dir\n"
     sudo mv ~/Downloads/android-sdk-linux $sdk_dir
+}
+
+# Android Studio Install
+function android_studio {
+    android_studio_file="android-studio-ide-141.2288178-linux.zip"
+
+    sudo apt-get install -y $java_package
+
+    mkdir -p ~/Downloads
+    if [ ! -f ~/Downloads/$android_studio_file ]
+    then
+        printf "Downloading $android_studio_file\n"
+        wget -P ~/Downloads https://dl.google.com/dl/android/studio/ide-zips/1.4.0.10/$android_studio_file
+    else
+        printf "Android Studio already downloaded\n"
+    fi
+    printf "Unzipping $android_studio_file\n"
+    unzip ~/Downloads/$android_studio_file -d ~/Downloads
+    sudo mv ~/Downloads/android-studio /opt
+    /opt/android-studio/bin/studio.sh &
 }
 
 # Gradle
@@ -190,14 +251,17 @@ function usage {
     printf "Options available:\n"
     printf $format "  -all" "Install all options"
     printf $format "  -android" "Install Andriod SDK and configure ANDROID_HOME"
+    printf $format "  -android-studio" "Install Android Studio"
     printf $format "  -chrome" "Install the Chrome Browser"
     printf $format "  -docker" "Install Docker"
     printf $format "  -dotfiles" "Symbolic link dotfiles"
     printf $format "  -install" "Install packages with apt-get"
     printf $format "  -gradle" "Install Gradle and configure to run as daemon"
     printf $format "  -mongodb" "Setup apt sources list to include mongodb"
+    printf $format "  -pycharm" "Install JetBrains PyCharm"
     printf $format "  -python" "Setup python virtualenv"
     printf $format "  -virtual" "Setup Vagrant and Virtualbox"
+    printf $format "  -webstorm" "Install JetBrains Webstorm"
     printf $format "  -wol" "Wake-On-Lan install and config wake_on_lan_* functions"
 
     printf $format "  -h, --help" "This help message"
@@ -236,6 +300,9 @@ do
         -android)
             android
             ;;
+        -android-studio)
+            android_studio
+            ;;
         -chrome)
             chrome
             ;;
@@ -254,11 +321,17 @@ do
         -mongodb)
             mongodb
             ;;
+        -pycharm)
+            pycharm_ide
+            ;;
         -python)
             python_env
             ;;
         -virtual)
             virtual
+            ;;
+        -webstorm)
+            webstorm_ide
             ;;
         -wol)
             wakeonlan
