@@ -105,6 +105,32 @@ function mongodb {
     sudo apt-get install mongodb-org
 }
 
+# Install Node.js from source
+function nodejs_source {
+    if [ -d /opt/node ]
+    then
+        printf "Node already exists at /opt/node\n"
+    else
+        printf "Cloning node to /opt/node\n"
+        git clone https://github.com/nodejs/node
+        sudo mv node /opt/
+    fi
+
+    if command -v node >/dev/null 2>&1
+    then
+        printf "node already installed\n"
+    else
+        printf "Installing node from source\n"
+        cd /opt/node
+        git checkout -b v4.2.1 refs/tags/v4.2.1
+        ./configure
+        make
+        sudo make install
+        make doc
+        cd $current_dir
+    fi
+}
+
 # Android SDK
 function android {
     # Check to see if ANDROID_HOME exists and is a valid directory
@@ -267,6 +293,7 @@ function usage {
     printf $format "  -install" "Install packages with apt-get"
     printf $format "  -gradle" "Install Gradle and configure to run as daemon"
     printf $format "  -mongodb" "Setup apt sources list to include mongodb"
+    printf $format "  -nodejs" "Install Node.js from souce"
     printf $format "  -pycharm" "Install JetBrains PyCharm"
     printf $format "  -python" "Setup python virtualenv"
     printf $format "  -virtual" "Setup Vagrant and Virtualbox"
@@ -332,6 +359,9 @@ do
             ;;
         -mongodb)
             mongodb
+            ;;
+        -nodejs)
+            nodejs_source
             ;;
         -pycharm)
             pycharm_ide
