@@ -55,6 +55,12 @@ function python_env {
     fi
     mkdir -p ~/.bashrc.d
     ln -svf $current_dir/bashrc.d/2-pyenv.sh ~/.bashrc.d/2-pyenv.sh
+
+    if [ ! -d ~/.pyenv/plugins/pyenv-virtualenv ]
+    then
+        mkdir -p ~/.pyenv/plugins
+        git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
+    fi
 }
 
 # Setup PyCharm
