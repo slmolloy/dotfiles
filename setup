@@ -218,6 +218,29 @@ function gradle {
     sudo unzip ~/Downloads/$gradle_file -d /usr/local/gradle/
 }
 
+# Install Arduino IDE
+function arduino_install {
+    arduino_file="arduino-1.6.5-r5-linux64.tar.xz"
+
+    sudo apt-get install -y $java_package
+
+    mkdir -p ~/Downloads
+    if [ ! -f ~/Downloads/$arduino_file ]
+    then
+        printf "Downloading $arduino_file\n"
+        wget -P ~/Downloads http://downloads.arduino.cc/$arduino_file
+    else
+        printf "Arduino IDE already downloaded\n"
+    fi
+    printf "Unzipping $arduino_file\n"
+    tar xf ~/Downloads/$arduino_file -C ~/Downloads
+    sudo find ~/Downloads -name arduino* -type d -execdir mv {} /opt/arduino \;
+    # Replace FULL_PATH found in default .desktop file with install path
+    sed -i -- 's/FULL_PATH/\/opt\/arduino/g' /opt/arduino/arduino.desktop
+    # Copy .desktop file so it can be used from Ubuntu search menu
+    sudo cp /opt/arduino/arduino.desktop /usr/share/applications/arduino.desktop
+}
+
 # Vagrant and Virtualbox
 function virtual {
     sudo apt-get install -y virtualbox vagrant
@@ -292,6 +315,7 @@ function usage {
     printf $format "  -all" "Install all options"
     printf $format "  -android" "Install Andriod SDK and configure ANDROID_HOME"
     printf $format "  -android-studio" "Install Android Studio"
+    printf $format "  -arduino" "Install Arduino IDE and copy .desktop file"
     printf $format "  -chrome" "Install the Chrome Browser"
     printf $format "  -docker" "Install Docker"
     printf $format "  -dotfiles" "Symbolic link dotfiles"
@@ -344,6 +368,9 @@ do
             ;;
         -android-studio)
             android_studio
+            ;;
+        -arduino)
+            arduino_install
             ;;
         -chrome)
             chrome
