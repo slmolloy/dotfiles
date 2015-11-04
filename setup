@@ -109,6 +109,26 @@ function webstorm_ide {
     /opt/webstorm/bin/webstorm.sh &
 }
 
+# Setup IntelliJ
+function intellij_ide {
+    intellij_file="ideaIC-14.1.5.tar.gz"
+
+    sudo apt-get install -y $java_package
+
+    mkdir -p ~/Downloads
+    if [ ! -f ~/Downloads/$intellij_file ]
+    then
+        printf "Downloading $intellij_file\n"
+        wget -P ~/Downloads https://download.jetbrains.com/idea/$intellij_file
+    else
+        printf "IntelliJ already downloaded\n"
+    fi
+    printf "Unzipping $intellij_file\n"
+    tar -xf ~/Downloads/$intellij_file -C ~/Downloads
+    sudo find ~/Downloads -name idea-IC* -type d -execdir mv {} /opt/intellij \;
+    /opt/intellij/bin/idea.sh &
+}
+
 # MongoDB
 function mongodb {
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
@@ -327,6 +347,7 @@ function usage {
     printf $format "  -dotfiles" "Symbolic link dotfiles"
     printf $format "  -dropbox" "Install Dropbox"
     printf $format "  -install" "Install packages with apt-get"
+    printf $format "  -intellij" "Install IntelliJ Idea"
     printf $format "  -gradle" "Install Gradle and configure to run as daemon"
     printf $format "  -mongodb" "Setup apt sources list to include mongodb"
     printf $format "  -nodejs" "Install Node.js from souce"
@@ -392,6 +413,9 @@ do
             ;;
         -install)
             install
+            ;;
+        -intellij)
+            intellij_ide
             ;;
         -gradle)
             gradle
