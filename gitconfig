@@ -13,3 +13,31 @@
 	prompt = false
 [push]
 	default = simple
+[color]
+    ui = auto
+[alias]
+    a = add
+    ai = add -i
+    l = log
+    ls = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    r = reset
+    rs = reset
+    d = diff
+    dt = difftool
+    dc = diff --cached
+    b = branch
+    br = branch
+    s = status
+    c = commit
+    ci = commit
+    co = checkout
+    p = push
+    ps = push
+    pl = pull
+    f = fetch
+    re = rebase
+    rb = rebase
+    rei = rebase -i
+    rbi = rebase -i
+    ri = rebase -i
+
