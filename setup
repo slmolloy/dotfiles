@@ -40,6 +40,12 @@ function dot_files {
     mkdir -p ~/.bashrc.d
     ln -svf $current_dir/bashrc.d/1-colors.sh ~/.bashrc.d/1-colors.sh
     ln -svf $current_dir/bashrc.d/2-prompt.sh ~/.bashrc.d/2-prompt.sh
+    ln -svf $current_dir/bashrc.d/2-man-color.sh ~/.bashrc.d/2-man-color.sh
+
+    if [ -d ~/.gconf/apps/gnome-terminal/profiles/Default ]
+    then
+        ln -svf $current_dir/gconf/gconf.xml ~/.gconf/apps/gnome-terminal/profiles/Default/%gconf.xml
+    fi
 }
 
 # Python Environment
@@ -304,7 +310,7 @@ function dropbox_install {
 # Install packages
 function install {
     sudo apt-get update
-    sudo apt-get install -y build-essential cmake ctags make python-dev curl vim git whois
+    sudo apt-get install -y build-essential cmake ctags make python-dev curl vim git whois openssh-server
 }
 
 # Help usage message
