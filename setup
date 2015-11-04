@@ -42,10 +42,10 @@ function dot_files {
     ln -svf $current_dir/bashrc.d/2-prompt.sh ~/.bashrc.d/2-prompt.sh
     ln -svf $current_dir/bashrc.d/2-man-color.sh ~/.bashrc.d/2-man-color.sh
 
-    if [ -d ~/.gconf/apps/gnome-terminal/profiles/Default ]
-    then
-        ln -svf $current_dir/gconf/gconf.xml ~/.gconf/apps/gnome-terminal/profiles/Default/%gconf.xml
-    fi
+    gconftool-2 --set "/apps/gnome-terminal/profiles/Default/use_theme_colors" --type bool false
+    gconftool-2 --set "/apps/gnome-terminal/profiles/Default/foreground_color" --type string "#B8B8C4C4D0D0"
+    gconftool-2 --set "/apps/gnome-terminal/profiles/Default/background_color" --type string "#262626262626"
+    gconftool-2 --set "/apps/gnome-terminal/profiles/Default/scrollback_lines" --type int 1024
 }
 
 # Python Environment
