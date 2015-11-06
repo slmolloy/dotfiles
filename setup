@@ -268,6 +268,38 @@ function arduino_install {
     sudo cp /opt/arduino/arduino.desktop /usr/share/applications/arduino.desktop
 }
 
+function aspnet_install {
+    # Add Mono key and package repositories
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+    echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
+    echo "deb http://download.mono-project.com/repo/debian wheezy-apache24-compat main" | sudo tee -a /etc/apt/sources.list.d/mono-xamarin.list
+    # Update after adding new repositories
+    sudo apt-get update
+
+    # Install all required packages
+    sudo apt-get install -y unzip curl libunwind8 gettext libssl-dev libcurl3-dev zlib1g libicu-dev mono-complete make automake libtool
+
+    # Install dnvm
+    curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | DNX_BRANCH=dev sh && source ~/.dnx/dnvm/dnvm.sh
+
+    # Use dnvm to intsall dnx and dnx for Mono
+    dnvm upgrade -r coreclr mono
+
+    # Install libuv
+    curl -sSL https://github.com/libuv/libuv/archive/v1.4.2.tar.gz | sudo tar zxfv - -C /usr/local/src
+    CUR_DIR=$PWD
+    cd /usr/local/src/libuv-1.4.2
+    sudo sh autogen.sh
+    sudo ./configure
+    sudo make
+    sudo make install
+    sudo ldconfig
+    cd $CUR_DIR
+    sudo rm -rf /usr/local/src/libuv-1.4.2
+
+    . ~/.bashrc
+}
+
 # Vagrant and Virtualbox
 function virtual {
     sudo apt-get install -y virtualbox vagrant
@@ -343,6 +375,7 @@ function usage {
     printf $format "  -android" "Install Andriod SDK and configure ANDROID_HOME"
     printf $format "  -android-studio" "Install Android Studio"
     printf $format "  -arduino" "Install Arduino IDE and copy .desktop file"
+    printf $format "  -aspnet" "Install ASP.NET on Linux, OH NO!"
     printf $format "  -chrome" "Install the Chrome Browser"
     printf $format "  -docker" "Install Docker"
     printf $format "  -dotfiles" "Symbolic link dotfiles"
@@ -399,6 +432,9 @@ do
             ;;
         -arduino)
             arduino_install
+            ;;
+        -aspnet)
+            aspnet_install
             ;;
         -chrome)
             chrome
