@@ -130,6 +130,13 @@ function intellij_ide {
     /opt/intellij/bin/idea.sh &
 }
 
+# Inkscape
+function inkscape {
+    sudo ln -svf $current_dir/apt/sources.list.d/inkscape.list /etc/apt/sources.list.d/inkscape.list
+    sudo apt-get update
+    sudo apt-get install -y inkscape
+}
+
 # MongoDB
 function mongodb {
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
@@ -380,6 +387,7 @@ function usage {
     printf $format "  -docker" "Install Docker"
     printf $format "  -dotfiles" "Symbolic link dotfiles"
     printf $format "  -dropbox" "Install Dropbox"
+    printf $format "  -inkscape" "Install Inkscape"
     printf $format "  -install" "Install packages with apt-get"
     printf $format "  -intellij" "Install IntelliJ Idea"
     printf $format "  -gradle" "Install Gradle and configure to run as daemon"
@@ -447,6 +455,9 @@ do
             ;;
         -dropbox)
             dropbox_install
+            ;;
+        -inkscape)
+            inkscape
             ;;
         -install)
             install
