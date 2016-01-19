@@ -30,6 +30,7 @@
     s = status
     c = commit
     ci = commit
+    ca = commit --amend
     co = checkout
     p = push
     ps = push
