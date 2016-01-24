@@ -367,6 +367,13 @@ function dropbox_install {
     sudo apt-get install -fy
 }
 
+# Install hal for Hulu support on Firefox
+function hulu_hal_install {
+    sudo add-apt-repository ppa:mjblenner/ppa-hal
+    sudo apt-get update
+    sudo apt-get install -y hal
+}
+
 # Install packages
 function install {
     sudo apt-get update
@@ -391,6 +398,7 @@ function usage {
     printf $format "  -install" "Install packages with apt-get"
     printf $format "  -intellij" "Install IntelliJ Idea"
     printf $format "  -gradle" "Install Gradle and configure to run as daemon"
+    printf $format "  -hulu" "Install HAL for Hulu support in Firefox"
     printf $format "  -mongodb" "Setup apt sources list to include mongodb"
     printf $format "  -nodejs" "Install Node.js from souce"
     printf $format "  -pycharm" "Install JetBrains PyCharm"
@@ -467,6 +475,9 @@ do
             ;;
         -gradle)
             gradle
+            ;;
+        -hulu)
+            hulu_hal_install
             ;;
         -mongodb)
             mongodb
