@@ -205,7 +205,7 @@ function android {
 
 # Android Studio Install
 function android_studio {
-    android_studio_file="android-studio-ide-141.2288178-linux.zip"
+    android_studio_file="android-studio-ide-143.2739321-linux.zip"
 
     sudo apt-get install -y $java_package
 
@@ -213,7 +213,7 @@ function android_studio {
     if [ ! -f ~/Downloads/$android_studio_file ]
     then
         printf "Downloading $android_studio_file\n"
-        wget -P ~/Downloads https://dl.google.com/dl/android/studio/ide-zips/1.4.0.10/$android_studio_file
+        wget -P ~/Downloads http://dl.google.com/android/studio/ide-zips/2.0.0.20/$android_studio_file
     else
         printf "Android Studio already downloaded\n"
     fi
@@ -234,7 +234,7 @@ function gradle {
 
     # If GRADLE_HOME does not exist or is not a directory then install
     gradle_dir="/usr/local/gradle"
-    gradle_file="gradle-2.7-all.zip"
+    gradle_file="gradle-2.10-all.zip"
 
     # Link Gradle configuration file
     sudo ln -svf $current_dir/profile.d/gradle.sh /etc/profile.d/gradle.sh

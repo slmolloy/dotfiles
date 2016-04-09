@@ -1,4 +1,4 @@
-export GRADLE_HOME=/usr/local/gradle/gradle-2.7
+export GRADLE_HOME=/usr/local/gradle/gradle-2.10
 PATH=$GRADLE_HOME/bin:$PATH
 export PATH
 # Turn on Gradle daemon by default
