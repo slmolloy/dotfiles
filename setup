@@ -374,6 +374,13 @@ function hulu_hal_install {
     sudo apt-get install -y hal
 }
 
+# Install fish terminal
+function fish_install {
+    sudo apt-add-repository ppa:fish-shell/release-2
+    sudo apt-get update
+    sudo apt-get install -y fish
+}
+
 # Install packages
 function install {
     sudo apt-get update
@@ -394,6 +401,7 @@ function usage {
     printf $format "  -docker" "Install Docker"
     printf $format "  -dotfiles" "Symbolic link dotfiles"
     printf $format "  -dropbox" "Install Dropbox"
+    printf $format "  -fish" "Install Fish"
     printf $format "  -inkscape" "Install Inkscape"
     printf $format "  -install" "Install packages with apt-get"
     printf $format "  -intellij" "Install IntelliJ Idea"
@@ -463,6 +471,9 @@ do
             ;;
         -dropbox)
             dropbox_install
+            ;;
+        -fish)
+            fish_install
             ;;
         -inkscape)
             inkscape
