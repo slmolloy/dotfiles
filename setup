@@ -42,6 +42,7 @@ function dot_files {
     ln -svf $current_dir/bashrc.d/2-prompt.sh ~/.bashrc.d/2-prompt.sh
     ln -svf $current_dir/bashrc.d/2-man-color.sh ~/.bashrc.d/2-man-color.sh
     ln -svf $current_dir/bashrc.d/2-ssh.sh ~/.bashrc.d/2-ssh.sh
+    ln -svf $current_dir/bashrc.d/4-alias.sh ~/.bashrc.d/4-alias.sh
 
     gconftool-2 --set "/apps/gnome-terminal/profiles/Default/use_theme_colors" --type bool false
     gconftool-2 --set "/apps/gnome-terminal/profiles/Default/foreground_color" --type string "#B8B8C4C4D0D0"
