@@ -22,6 +22,7 @@
     ls = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     r = reset
     rs = reset
+    rh = reset --hard
     d = diff
     dt = difftool
     dc = diff --cached
