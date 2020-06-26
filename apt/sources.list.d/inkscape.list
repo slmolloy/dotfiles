@@ -1,2 +1,2 @@
-deb http://ppa.launchpad.net/inkscape.dev/stable/ubuntu trusty main
-deb-src http://ppa.launchpad.net/inkscape.dev/stable/ubuntu trusty main
+# deb http://ppa.launchpad.net/inkscape.dev/stable/ubuntu xenial main # disabled on upgrade to xenial
+# deb-src http://ppa.launchpad.net/inkscape.dev/stable/ubuntu xenial main # disabled on upgrade to xenial

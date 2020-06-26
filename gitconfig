@@ -42,4 +42,5 @@
     rei = rebase -i
     rbi = rebase -i
     ri = rebase -i
+    cp = cherry-pick
 
