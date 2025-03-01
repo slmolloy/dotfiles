@@ -44,3 +44,5 @@
     ri = rebase -i
     cp = cherry-pick
 
+[init]
+	defaultBranch = main

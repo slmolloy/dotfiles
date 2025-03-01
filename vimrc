@@ -1,10 +1,15 @@
-" Install pathogen
-execute pathogen#infect()
+call plug#begin()
+Plug 'tpope/vim-sensible'
+Plug 'doums/darcula'
+Plug 'vim-scripts/taglist.vim'
+Plug 'vim-syntastic/syntastic'
+call plug#end()
 
-syntax enable 
-filetype plugin indent on
-
+set termguicolors
 colorscheme darcula
+
+syntax enable
+filetype plugin indent on
 
 set modeline
 set ls=2
@@ -46,6 +51,7 @@ autocmd FileType h setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab foldm
 autocmd FileType make setlocal tabstop=4 softtabstop=4 shiftwidth=4 foldmethod=syntax foldnestmax=10 nofoldenable foldlevel=1
 autocmd FileType sh setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab foldmethod=syntax foldnestmax=10 nofoldenable foldlevel=1
 autocmd FileType java setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab foldmethod=syntax foldnestmax=10 nofoldenable foldlevel=1
+autocmd FileType kotlin setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab foldmethod=syntax foldnestmax=10 nofoldenable foldlevel=1
 autocmd FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab foldmethod=syntax foldnestmax=10 nofoldenable foldlevel=1
 autocmd FileType perl setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab foldmethod=syntax foldnestmax=10 nofoldenable foldlevel=1
 autocmd FileType ruby setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab foldmethod=syntax foldnestmax=10 nofoldenable foldlevel=1
@@ -53,13 +59,15 @@ autocmd FileType proto setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab f
 autocmd FileType yaml setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab foldmethod=syntax foldnestmax=10 nofoldenable foldlevel=1
 autocmd FileType html setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab foldmethod=syntax foldnestmax=10 nofoldenable foldlevel=1
 autocmd FileType javascript setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab foldmethod=syntax foldnestmax=10 nofoldenable foldlevel=1
+autocmd FileType dart setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab foldmethod=syntax foldnestmax=10 nofoldenable foldlevel=1
+
 
 " Allows Shift+Tab to go back one indentation level
 nmap <S-Tab> <<
 imap <S-Tab> <Esc><<i
 
 " Remove trailing whitespace on file save
-autocmd FileType cpp,c,h,make,sh,java,python,perl,ruby,text,xml,java,proto,yaml,html,javascript autocmd BufWritePre <buffer> :%s/\s\+$//e
+autocmd FileType cpp,c,h,make,sh,java,kotlin,python,perl,ruby,text,xml,java,proto,yaml,html,javascript,dart autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 " Fix copy and pasting oddity. Normally after pasting text the copy register
 " will be clear and selection will have to be selected and copied again.
